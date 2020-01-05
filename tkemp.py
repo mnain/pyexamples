@@ -8,10 +8,21 @@ import time
 import glob
 import logging
 import logging.config
+import multiprocessing
 
 _YOUTUBE_PATH='../python/youtube-dl'
 _LOG_CONFIG = 'tkelog.conf'
 _logger = None
+
+class Download(multiprocessing.Process):
+	def __initialize__(self, url, audio):
+		multiprocessing.Process.__init__()
+		_logger.info('Download initialize with : {} {}'.format(url,audio))
+		self.url = url
+		self.audioOnly = audio
+
+	def run(self):
+		_logger.info('Download run: {} {}'.format(self.url, self.audioOnly))
 
 def cleanLogs():
 	outFiles = glob.glob('output*log')
@@ -47,7 +58,7 @@ def handleEntry():
 	svar.set(txt)
 	aOnly = audioVar.get()
 	lbl.update()
-	download(txt, aOnly)
+	dl = Download(txt, aOnly)
 
 if __name__ == "__main__":
 	logging.config.fileConfig(_LOG_CONFIG)
