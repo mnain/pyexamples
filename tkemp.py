@@ -9,6 +9,7 @@ import glob
 import logging
 import logging.config
 import multiprocessing
+import mpc
 
 _YOUTUBE_PATH='../python/youtube-dl'
 _LOG_CONFIG = 'tkelog.conf'
@@ -57,8 +58,14 @@ def handleEntry():
 	txt = entry.get()
 	svar.set(txt)
 	aOnly = audioVar.get()
+	if aOnly:
+		audioOnly = 'Audio'
+	else:
+		audioOnly = 'Video'
 	lbl.update()
-	dl = Download(txt, aOnly)
+	#dl = Download(txt, aOnly)
+	proc = mpc.LogProc()
+	proc.run(txt, audioOnly)
 
 if __name__ == "__main__":
 	logging.config.fileConfig(_LOG_CONFIG)
